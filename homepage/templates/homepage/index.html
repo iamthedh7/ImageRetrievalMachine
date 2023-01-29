@@ -25,7 +25,7 @@
                         <div class="col-lg-5">
                             <div class="card">
                                 <h6 class="text-left">Query</h6>
-                                <img src="{{ query }}" class="card-img-top" alt="Can not load image" height="200px">
+                                <img id="query_img" src="{{ query }}" class="card-img-top" alt="Can not load image" height="200px">
                                 <br>
                             </div>
                         </div>
@@ -57,7 +57,6 @@
             
             {% if query %}
             <div id="results">
-                <h6>About {{ top_k }} results ({{time}} seconds)</h6>
                 <div class="row">
                     {% for i in images %}
                         <div class="col-lg-2">
@@ -87,9 +86,13 @@
     														
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        $("#button-search").on( "click", function() {
-            $('#results').prop('hidden', true)
-            $('#spinner').prop('hidden', false)
+        $("#button-search").on("click", function() {
+            $('#results').prop('hidden', true);
+            $('#spinner').prop('hidden', false);
+        });
+        $("#id_img").on("change", function() {
+            const path_changed = $("#id_img").val().toString();
+            $("#query_img").attr('src', 'media\\images\\dataX\\oxbuild_images-v1\\' + path_changed.split('\\')[2])
         });
     </script>
     														
