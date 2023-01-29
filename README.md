@@ -1,6 +1,4 @@
-# ImageRetrievalMachine
-
-HOW TO RUN
+# HOW TO RUN
 
 ## 1: tạo một môi trường mới (conda/virtual/pipenv/...)
 ## 2: cd tới thư mục project
