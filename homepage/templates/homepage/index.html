@@ -58,6 +58,7 @@
             {% if query %}
             <div id="results">
                 <div class="row">
+                    <h6>About {{ top_k }} results ({{ time }}s)</h6>
                     {% for i in images %}
                         <div class="col-lg-2">
                             <div class="card" data-bs-toggle="modal" data-bs-target="#resultmodal{{i}}">
