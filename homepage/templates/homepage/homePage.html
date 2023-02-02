@@ -1,0 +1,128 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <style>
+        .card {border-color: white !important}
+        img {
+            display: block;
+            border: 1px solid gray;
+            border-radius: 5px;
+            /* This rule is very important, please don't ignore this */
+            max-width: fit-content;
+            max-height: 90vh;
+            margin: 0;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+</head>
+<body style="padding: 30px">
+    <form id="query_form" method = "post" enctype="multipart/form-data">
+    {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-3">
+                <p>
+                    <input type="file" class="form-control" name="img" accept="image/*" id="id_img" required>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Show</span>
+                        <input type="number" class="form-control" name="topk" value="20" required id="id_topk">
+                        <span class="input-group-text" id="inputGroup-sizing-default">results</span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" name="use_full" id="use_full">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Use full image</label>
+                    </div>
+                </p>
+            </div>
+            <div id="query_preview" class="col-lg-7" hidden>
+                <div class="card" style="display: grid; height: 100%;">
+                    <img id="query_img" src="{{ query }}" class="card-img-top" alt="Can not load image">
+                </div>
+            </div>
+            <div id="param_preview" class="col-lg-2" hidden>
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><b>x</b></span>
+                        <input name="x" type="number" class="form-control" id="x" aria-label="x" >
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><b>y</b></span>
+                        <input name="y" type="number" class="form-control" id="y" aria-label="y" >
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><b>w</b></span>
+                        <input name="w" type="number" class="form-control" id="width" aria-label="width" >
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><b>h</b></span>
+                        <input name="h" type="number" class="form-control" id="height" aria-label="height" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-outline-success" id="button-search">Search</button>
+    </form>
+    														
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $("#id_img").on("change", function() {
+            var path_changed = $("#id_img").val().toString();
+            $("#query_img").attr('src', 'media\\images\\dataX\\oxbuild_images-v1\\' + path_changed.split('\\')[2]);
+            if (path_changed) {
+                $('#query_preview').prop('hidden', false);
+                $('#param_preview').prop('hidden', false);
+                var image = document.getElementById('query_img');
+                var cropper = new Cropper(image, {
+                    crop(event) {
+                        $('#x').val(event.detail.x);
+                        $('#y').val(event.detail.y);
+                        $('#width').val(event.detail.width);
+                        $('#height').val(event.detail.height);
+                    },
+                });
+            }
+            else {
+                $('#query_preview').prop('hidden', true);
+                $('#param_preview').prop('hidden', true);
+            }
+        })
+
+        $("#query_form").submit(function (event) {
+            event.preventDefault();
+            let csr = $("input[name=csrfmiddlewaretoken]").val();
+            $.ajax({
+                url: '/',
+                type: 'POST',
+                dataType: 'json',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    'img_path': $('#id_img').val(),
+                    'top_k': $('#id_topk').val(),
+                    'use_full': $('#use_full').is(':checked'),
+                    'x': $('#x').val(),
+                    'y': $('#y').val(), 
+                    'w': $('#width').val(), 
+                    'h': $('#height').val(),
+                }),
+                headers: {"X-CSRFToken": csr},
+            })
+        })
+    </script>												
+</body>
+</html>
