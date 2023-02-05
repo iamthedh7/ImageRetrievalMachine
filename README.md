@@ -6,5 +6,5 @@
 ### 4: activate môi trường mới tạo -> pip install -r req.txt
 ### 5: python manage.py makemigrations
 ### 6: python manage.py migrate
-### 7: RUN: python manage.py runserver
-### 8: mở localhost cổng 8000 lên, test app.
+### 7: RUN: python manage.py runserver <port>
+### 8: mở localhost cổng <port> lên, test app.
