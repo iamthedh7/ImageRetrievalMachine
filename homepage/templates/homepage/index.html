@@ -107,7 +107,7 @@
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Show</span>
-                            <input type="number" class="form-control" name="topk" value="20" required id="id_topk">
+                            <input type="number" class="form-control" name="topk" value="20" min="0" max="5064" required id="id_topk">
                             <span class="input-group-text" id="inputGroup-sizing-default">results</span>
                         </div>
                     {% endif %}
@@ -140,6 +140,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-body">
+                                        <h6 class="card-text">{{ i }}</h6>
                                         <img src="media/images/dataX/oxbuild_images-v1/{{ i }}.jpg" class="card-img-top" alt="Can not load image">
                                     </div>
                                 </div>

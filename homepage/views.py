@@ -25,12 +25,13 @@ def feature_extract(img_path, model):
     x = np.expand_dims(x, axis=0)
     x = preprocess_input(x)
 
-    features =  model.predict(x)
+    features = model.predict(x)
     flattened_features = features.flatten()
     normalized_features = flattened_features / np.linalg.norm(flattened_features)
     return normalized_features.reshape(-1,1).T[0]
 
 # Create your views here.
+
 
 class HomePage(APIView):
     
@@ -39,7 +40,7 @@ class HomePage(APIView):
         return render(request, template_name='homepage/index.html', context={
             'form': form,
         })
-    
+
     def post(self, request, *args, **kwargs):
         form = SearchForm(request.POST, request.FILES)
         if form.is_valid(): 
@@ -64,26 +65,22 @@ class HomePage(APIView):
                 crop_img = img[y:y+h, x:x+w]
                 img_path = img_path[:-4]+'_crop.jpg'
                 cv2.imwrite(img_path, crop_img)
-            
-            # shape_height, shape_width = img.shape[0], img.shape[1]
-            # ratio = shape_height/shape_width
-            # ra
                        
             top_k = form.instance.topk
             start = time.time()
             dist, indx = kd.query(feature_extract(img_path, model).reshape(-1,1).T, top_k)
             end = time.time()
 
-            ## reading images
-            Images = []
+            # reading images
+            images = []
             for i in range(top_k):
-                Images.append(feature_id[indx[0][i]].split('/')[-1][:-4])
+                images.append(feature_id[indx[0][i]].split('/')[-1][:-4])
             
             return render(request, template_name='homepage/index.html', context={
                 'query': img_path, 
                 'top_k': top_k, 
                 'form': form, 
-                'images': Images, 
+                'images': images,
                 'time': round(end - start, 2),
                 'x': x, 
                 'y': y, 
