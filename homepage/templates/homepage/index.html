@@ -19,6 +19,9 @@
             height: 400px;
             object-fit: contain;
         }
+        #id_img {
+            border: 2px gray dashed;
+        }
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
@@ -90,7 +93,7 @@
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Show</span>
                             <input type="number" class="form-control" name="topk" value="{{ top_k }}" required id="id_topk">
-                            <span class="input-group-text" id="inputGroup-sizing-default">results</span>
+                            <span class="input-group-text">results</span>
                         </div>
                     {% else %}
                         <input type="file" class="form-control" name="img" accept="image/*" id="id_img" required>
